@@ -23,6 +23,7 @@ export function AuthProvider({ children }) {
     return false;
   }, []);
 
+  // ── Moved ABOVE useEffect ─────────────────────────────────
   const tryRefresh = useCallback(async () => {
     try {
       const res = await fetch(`${API}/api/auth/refresh`, {
@@ -75,16 +76,10 @@ export function AuthProvider({ children }) {
   };
 
   return (
-    <AuthContext.Provider
-      value={{ user, token, loading, isAuthenticated: !!token, login, logout, fetchMe, tryRefresh }}
-    >
+    <AuthContext.Provider value={{ user, token, loading, login, logout, fetchMe, tryRefresh }}>
       {children}
     </AuthContext.Provider>
   );
 }
 
-export function useAuth() {
-  const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error("useAuth must be used within an AuthProvider");
-  return ctx;
-}
+export const useAuth = () => useContext(AuthContext);

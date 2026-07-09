@@ -4,12 +4,10 @@ import SearchApp from "./searchbar/search";
 import Sidebar from "./sidebar/Sidebar";
 import { useAuth } from "./Auth/AuthContext";
 import { usePrefs } from "./Auth/PrefsContext";
-import LandingPage from "./Auth/LandingPage";
 import NeuralQuizApp from "./quiz/NeuralQuizApp";
 import InterviewPage from "./pages/InterviewPage";
 import PublicSpeakingPage from "./pages/PublicSpeakingPage";
 import RoadmapPage from "./pages/roadmap/RoadmapPage";
-import OnboardingTour from "./components/layout/OnboardingTour";
 
 const API = "http://127.0.0.1:8000";
 
@@ -29,7 +27,7 @@ const THEMES = {
 };
 
 export default function App() {
-  const { token, user, authLoading } = useAuth();
+  const { token } = useAuth();
   const { prefs }  = usePrefs();
 
   // Resolve "system" theme
@@ -47,20 +45,22 @@ export default function App() {
 
   const loadConversations = useCallback(async () => {
     try {
+      const t = localStorage.getItem("access_token");
       const headers = {};
-      if (token) headers["Authorization"] = `Bearer ${token}`;
+      if (t) headers["Authorization"] = `Bearer ${t}`;
       const res = await fetch(`${API}/conversations`, { headers });
       const data = await res.json();
       setConversations(data);
     } catch (err) {
       console.error("Failed to load conversations:", err);
     }
-  }, [token]);
+  }, []);
 
   const loadMessages = useCallback(async (conversationId) => {
     try {
+      const t = localStorage.getItem("access_token");
       const headers = {};
-      if (token) headers["Authorization"] = `Bearer ${token}`;
+      if (t) headers["Authorization"] = `Bearer ${t}`;
       const res = await fetch(
         `${API}/conversation/${conversationId}/messages`,
         { headers }
@@ -71,7 +71,7 @@ export default function App() {
       console.error("Failed to load messages:", err);
       setMessages([]);
     }
-  }, [token]);
+  }, []);
 
   const handleSelectConversation = useCallback(
     async (id) => {
@@ -99,8 +99,9 @@ export default function App() {
         .slice(0, 60) || "New Chat";
 
     try {
+      const t = localStorage.getItem("access_token");
       const headers = { "Content-Type": "application/json" };
-      if (token) headers["Authorization"] = `Bearer ${token}`;
+      if (t) headers["Authorization"] = `Bearer ${t}`;
 
       const res = await fetch(`${API}/conversation`, {
         method: "POST",
@@ -115,7 +116,7 @@ export default function App() {
       console.error("Failed to auto-create conversation:", err);
       return null;
     }
-  }, [token]);
+  }, []);
 
   const handleDeleteConversation = useCallback(
     (deletedId) => {
@@ -124,7 +125,8 @@ export default function App() {
         if (deletedId === selectedConversationId) {
           if (remaining.length > 0) {
             setSelectedConversationId(remaining[0].id);
-            const headers = token ? { Authorization: `Bearer ${token}` } : {};
+            const t = localStorage.getItem("access_token");
+            const headers = t ? { Authorization: `Bearer ${t}` } : {};
             fetch(`${API}/conversation/${remaining[0].id}/messages`, { headers })
               .then((r) => r.json())
               .then((data) => setMessages(data))
@@ -137,32 +139,12 @@ export default function App() {
         return remaining;
       });
     },
-    [selectedConversationId, token]
+    [selectedConversationId]
   );
 
   useEffect(() => {
-    // Only pull conversations once we actually have an authenticated user —
-    // otherwise a guest on first paint would fire an unauthenticated request.
-    if (user) loadConversations();
-  }, [user, loadConversations]);
-
-  // ── Auth gate ────────────────────────────────────────────────────────────
-  // While AuthContext is still resolving the stored session (e.g. validating
-  // a token on first load), render nothing but a blank themed background
-  // rather than flashing the landing page and then swapping to the app.
-  if (authLoading) {
-    return <div style={{ minHeight: "100vh", width: "100%", background: theme.appBg }} />;
-  }
-
-  // No authenticated user → LandingPage is the entire app, on every route.
-  // This intentionally does not render <Routes> at all: a guest hitting
-  // /practice-quiz or any other path directly still lands on LandingPage
-  // instead of the underlying page, because there's nothing to redirect
-  // back to yet. Once `login()` populates `user` in AuthContext, this
-  // component re-renders and falls through to the real routes below.
-  if (!user) {
-    return <LandingPage />;
-  }
+    loadConversations();
+  }, [loadConversations]);
 
   return (
     <div
@@ -188,8 +170,6 @@ export default function App() {
         onNewChat={handleNewChat}
         onConversationDeleted={handleDeleteConversation}
       />
-
-      <OnboardingTour />
 
       <div
         style={{

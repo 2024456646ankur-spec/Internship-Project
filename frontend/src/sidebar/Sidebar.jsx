@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../Auth/AuthContext";
+import SignIn from "../Auth/Signin";
+import SignUp from "../Auth/Signup";
 import SidebarPanels from "./SidebarPanels";
 
 const API = "http://127.0.0.1:8000";
@@ -22,18 +24,16 @@ export default function Sidebar({
   onConversationDeleted,
   authHeaders,
 }) {
-  // `user` is guaranteed non-null here: App.jsx only mounts Sidebar once a
-  // user is authenticated (see the auth gate in App.jsx). There is no guest
-  // rendering path in this component anymore — sign in / sign up now only
-  // happen on LandingPage before the app itself is reachable.
   const { user, logout }              = useAuth();
   const navigate                      = useNavigate();
   const location                      = useLocation();
   const W                             = isSidebarOpen ? 260 : 64;
   const [hoveredId, setHoveredId]     = useState(null);
   const [deletingId, setDeletingId]   = useState(null);
+  const [showSignIn, setShowSignIn]   = useState(false);
+  const [showSignUp, setShowSignUp]   = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
-  const [activePanel, setActivePanel] = useState(null);
+  const [activePanel, setActivePanel] = useState(null); // ← new
   const [deleteError, setDeleteError] = useState("");
 
   const openPanel = (name) => {
@@ -137,7 +137,6 @@ export default function Sidebar({
           <button
             onClick={handleNewChat}
             title="New chat"
-            data-tour="new-chat"
             style={{
               display: "flex", alignItems: "center", gap: 10,
               width: isSidebarOpen ? "100%" : 40, height: 40,
@@ -247,7 +246,7 @@ export default function Sidebar({
         )}
 
         {/* ── Practice Tools ── */}
-        <div data-tour="practice" style={{ padding: "8px 8px 4px", borderTop: "1px solid #2a2b2c", flexShrink: 0 }}>
+        <div style={{ padding: "8px 8px 4px", borderTop: "1px solid #2a2b2c", flexShrink: 0 }}>
           {isSidebarOpen && (
             <p style={{ fontSize: 11, fontWeight: 600, color: "#5f6368", padding: "8px 8px 4px", letterSpacing: "0.5px", textTransform: "uppercase", margin: 0 }}>Practice</p>
           )}
@@ -263,7 +262,6 @@ export default function Sidebar({
                 key={key}
                 onClick={() => handlePracticeClick(key)}
                 title={title}
-                data-tour={key === "career_roadmap" ? "career-roadmap" : undefined}
                 style={{
                   display: "flex", alignItems: "center", gap: 10,
                   width: isSidebarOpen ? "100%" : 40, height: 40,
@@ -288,127 +286,169 @@ export default function Sidebar({
           })}
         </div>
 
-        {/* ── Bottom: Account section ── */}
-        {/* No guest state to handle here — Sidebar only ever mounts for a
-            logged-in user (see the auth gate in App.jsx), so `user` below
-            is always truthy. */}
+        {/* ── Bottom: Auth section ── */}
         <div style={{ flexShrink: 0, padding: "8px 12px 16px", borderTop: "1px solid #2a2b2c" }}>
-          <div style={{ position: "relative" }}>
-            <button
-              onClick={() => setShowDropdown(v => !v)}
-              data-tour="account"
-              style={{
-                display: "flex", alignItems: "center",
-                gap: isSidebarOpen ? 10 : 0,
-                width: "100%", padding: "8px",
-                background: showDropdown ? "#282a2c" : "transparent",
-                border: "none", borderRadius: 10,
-                cursor: "pointer", color: "#e3e3e3",
-                fontFamily: "inherit",
-                justifyContent: isSidebarOpen ? "flex-start" : "center",
-                transition: "background 0.15s",
-              }}
-              onMouseEnter={e => e.currentTarget.style.background = "#282a2c"}
-              onMouseLeave={e => !showDropdown && (e.currentTarget.style.background = "transparent")}
-            >
-              <div style={{
-                width: 34, height: 34, borderRadius: "50%",
-                background: "linear-gradient(135deg, #6366f1, #a855f7)",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                fontSize: 13, fontWeight: 700, color: "#fff", flexShrink: 0,
-              }}>
-                {user.avatar_url
-                  ? <img src={user.avatar_url} alt="" style={{ width: 34, height: 34, borderRadius: "50%", objectFit: "cover" }} />
-                  : initials}
-              </div>
 
-              {isSidebarOpen && (
-                <div style={{ flex: 1, textAlign: "left", minWidth: 0 }}>
-                  <div style={{ fontSize: 14, fontWeight: 600, color: "#e3e3e3", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-                    {user.first_name} {user.last_name}
-                  </div>
-                  <div style={{ display: "flex", alignItems: "center", gap: 5, marginTop: 1 }}>
-                    <span style={{
-                      fontSize: 10, fontWeight: 600, letterSpacing: "0.4px",
-                      padding: "1px 6px", borderRadius: 4,
-                      background: user.subscription_type === "pro" ? "#7c4dff22" : "#22c55e22",
-                      color: user.subscription_type === "pro" ? "#a78bfa" : "#4ade80",
-                      textTransform: "uppercase",
-                    }}>
-                      {user.subscription_type === "pro" ? "Pro" : "Free"}
-                    </span>
-                    <span style={{ fontSize: 12, color: "#5f6368", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-                      @{user.username}
-                    </span>
-                  </div>
-                </div>
-              )}
+          {/* Guest expanded */}
+          {!user && isSidebarOpen && (
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              <button onClick={() => setShowSignIn(true)}
+                style={{ width: "100%", padding: "10px 0", background: "transparent", border: "1px solid #3a3b3c", color: "#e3e3e3", borderRadius: 10, fontSize: 14, fontWeight: 500, cursor: "pointer", fontFamily: "inherit", transition: "background 0.15s" }}
+                onMouseEnter={e => e.currentTarget.style.background = "#282a2c"}
+                onMouseLeave={e => e.currentTarget.style.background = "transparent"}
+              >Sign in</button>
+              <button onClick={() => setShowSignUp(true)}
+                style={{ width: "100%", padding: "10px 0", background: "#6366f1", border: "none", color: "#fff", borderRadius: 10, fontSize: 14, fontWeight: 600, cursor: "pointer", fontFamily: "inherit", transition: "background 0.15s" }}
+                onMouseEnter={e => e.currentTarget.style.background = "#5254cc"}
+                onMouseLeave={e => e.currentTarget.style.background = "#6366f1"}
+              >Sign up</button>
+            </div>
+          )}
 
-              {isSidebarOpen && (
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="#5f6368" style={{ flexShrink: 0, transform: showDropdown ? "rotate(180deg)" : "none", transition: "transform 0.2s" }}>
-                  <path d="M7 10l5 5 5-5z"/>
+          {/* Guest collapsed */}
+          {!user && !isSidebarOpen && (
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, alignItems: "center" }}>
+              <button onClick={() => setShowSignIn(true)} title="Sign in"
+                style={{ width: 40, height: 40, borderRadius: "50%", border: "1px solid #3a3b3c", background: "transparent", color: "#9aa0a6", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
                 </svg>
-              )}
-            </button>
+              </button>
+            </div>
+          )}
 
-            {/* Dropdown */}
-            {showDropdown && isSidebarOpen && (
-              <div style={{
-                position: "absolute", bottom: "calc(100% + 6px)", left: 0,
-                width: "100%", background: "#2a2b2c",
-                borderRadius: 12, border: "1px solid #3a3b3c",
-                boxShadow: "0 8px 24px rgba(0,0,0,0.4)",
-                overflow: "hidden", zIndex: 100,
-              }}>
-                {[
-                  { icon: "🎨", label: "Personalization", key: "personalization" },
-                  { icon: "👤", label: "Profile",         key: "profile" },
-                  { icon: "⚙️", label: "Settings",        key: "settings" },
-                  { icon: "❓", label: "Help",            key: "help" },
-                  { icon: "ℹ️", label: "About",           key: "about" },
-                ].map(({ icon, label, key }) => (
+          {/* Logged in */}
+          {user && (
+            <div style={{ position: "relative" }}>
+              <button
+                onClick={() => setShowDropdown(v => !v)}
+                style={{
+                  display: "flex", alignItems: "center",
+                  gap: isSidebarOpen ? 10 : 0,
+                  width: "100%", padding: "8px",
+                  background: showDropdown ? "#282a2c" : "transparent",
+                  border: "none", borderRadius: 10,
+                  cursor: "pointer", color: "#e3e3e3",
+                  fontFamily: "inherit",
+                  justifyContent: isSidebarOpen ? "flex-start" : "center",
+                  transition: "background 0.15s",
+                }}
+                onMouseEnter={e => e.currentTarget.style.background = "#282a2c"}
+                onMouseLeave={e => !showDropdown && (e.currentTarget.style.background = "transparent")}
+              >
+                <div style={{
+                  width: 34, height: 34, borderRadius: "50%",
+                  background: "linear-gradient(135deg, #6366f1, #a855f7)",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  fontSize: 13, fontWeight: 700, color: "#fff", flexShrink: 0,
+                }}>
+                  {user.avatar_url
+                    ? <img src={user.avatar_url} alt="" style={{ width: 34, height: 34, borderRadius: "50%", objectFit: "cover" }} />
+                    : initials}
+                </div>
+
+                {isSidebarOpen && (
+                  <div style={{ flex: 1, textAlign: "left", minWidth: 0 }}>
+                    <div style={{ fontSize: 14, fontWeight: 600, color: "#e3e3e3", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                      {user.first_name} {user.last_name}
+                    </div>
+                    <div style={{ display: "flex", alignItems: "center", gap: 5, marginTop: 1 }}>
+                      <span style={{
+                        fontSize: 10, fontWeight: 600, letterSpacing: "0.4px",
+                        padding: "1px 6px", borderRadius: 4,
+                        background: user.subscription_type === "pro" ? "#7c4dff22" : "#22c55e22",
+                        color: user.subscription_type === "pro" ? "#a78bfa" : "#4ade80",
+                        textTransform: "uppercase",
+                      }}>
+                        {user.subscription_type === "pro" ? "Pro" : "Free"}
+                      </span>
+                      <span style={{ fontSize: 12, color: "#5f6368", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                        @{user.username}
+                      </span>
+                    </div>
+                  </div>
+                )}
+
+                {isSidebarOpen && (
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="#5f6368" style={{ flexShrink: 0, transform: showDropdown ? "rotate(180deg)" : "none", transition: "transform 0.2s" }}>
+                    <path d="M7 10l5 5 5-5z"/>
+                  </svg>
+                )}
+              </button>
+
+              {/* Dropdown */}
+              {showDropdown && isSidebarOpen && (
+                <div style={{
+                  position: "absolute", bottom: "calc(100% + 6px)", left: 0,
+                  width: "100%", background: "#2a2b2c",
+                  borderRadius: 12, border: "1px solid #3a3b3c",
+                  boxShadow: "0 8px 24px rgba(0,0,0,0.4)",
+                  overflow: "hidden", zIndex: 100,
+                }}>
+                  {[
+                    { icon: "🎨", label: "Personalization", key: "personalization" },
+                    { icon: "👤", label: "Profile",         key: "profile" },
+                    { icon: "⚙️", label: "Settings",        key: "settings" },
+                    { icon: "❓", label: "Help",            key: "help" },
+                    { icon: "ℹ️", label: "About",           key: "about" },
+                  ].map(({ icon, label, key }) => (
+                    <button
+                      key={key}
+                      onClick={() => openPanel(key)}
+                      style={{
+                        display: "flex", alignItems: "center", gap: 10,
+                        width: "100%", padding: "11px 14px",
+                        background: "transparent", border: "none",
+                        color: "#bdc1c6", fontSize: 14,
+                        cursor: "pointer", fontFamily: "inherit",
+                        textAlign: "left", transition: "background 0.15s",
+                      }}
+                      onMouseEnter={e => e.currentTarget.style.background = "#3c3d3e"}
+                      onMouseLeave={e => e.currentTarget.style.background = "transparent"}
+                    >
+                      <span style={{ fontSize: 16 }}>{icon}</span>
+                      {label}
+                    </button>
+                  ))}
+
+                  <div style={{ height: 1, background: "#3a3b3c", margin: "4px 0" }} />
+
                   <button
-                    key={key}
-                    onClick={() => openPanel(key)}
+                    onClick={async () => { setShowDropdown(false); await logout(); }}
                     style={{
                       display: "flex", alignItems: "center", gap: 10,
                       width: "100%", padding: "11px 14px",
                       background: "transparent", border: "none",
-                      color: "#bdc1c6", fontSize: 14,
+                      color: "#f28b82", fontSize: 14,
                       cursor: "pointer", fontFamily: "inherit",
                       textAlign: "left", transition: "background 0.15s",
                     }}
                     onMouseEnter={e => e.currentTarget.style.background = "#3c3d3e"}
                     onMouseLeave={e => e.currentTarget.style.background = "transparent"}
                   >
-                    <span style={{ fontSize: 16 }}>{icon}</span>
-                    {label}
+                    <span style={{ fontSize: 16 }}>🚪</span>
+                    Log out
                   </button>
-                ))}
-
-                <div style={{ height: 1, background: "#3a3b3c", margin: "4px 0" }} />
-
-                <button
-                  onClick={async () => { setShowDropdown(false); await logout(); }}
-                  style={{
-                    display: "flex", alignItems: "center", gap: 10,
-                    width: "100%", padding: "11px 14px",
-                    background: "transparent", border: "none",
-                    color: "#f28b82", fontSize: 14,
-                    cursor: "pointer", fontFamily: "inherit",
-                    textAlign: "left", transition: "background 0.15s",
-                  }}
-                  onMouseEnter={e => e.currentTarget.style.background = "#3c3d3e"}
-                  onMouseLeave={e => e.currentTarget.style.background = "transparent"}
-                >
-                  <span style={{ fontSize: 16 }}>🚪</span>
-                  Log out
-                </button>
-              </div>
-            )}
-          </div>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
+
+      {/* ── Auth modals ── */}
+      {showSignIn && (
+        <SignIn
+          onClose={() => setShowSignIn(false)}
+          onSwitchToSignUp={() => { setShowSignIn(false); setShowSignUp(true); }}
+        />
+      )}
+      {showSignUp && (
+        <SignUp
+          onClose={() => setShowSignUp(false)}
+          onSwitchToLogin={() => { setShowSignUp(false); setShowSignIn(true); }}
+        />
+      )}
 
       {/* ── Sidebar panels (slide-in drawers) ── */}
       <SidebarPanels activePanel={activePanel} onClose={() => setActivePanel(null)} />

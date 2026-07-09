@@ -395,32 +395,12 @@ class MessageRequest(BaseModel):
 
 @app.post("/chat")
 async def chat(req: ChatRequest, current_user=Depends(get_optional_user)):
-    # ── DIAGNOSTIC (temporary) ──────────────────────────────────────────────
-    # Compare this printed conversation_id, byte-for-byte, against the id
-    # printed by [DIAG /conversation] when that conversation was created.
-    print(f"[DIAG /chat] received conversation_id = {req.conversation_id!r} (type={type(req.conversation_id)})")
-    print(f"[DIAG /chat] current_user = {current_user!r}")
-    # ── END DIAGNOSTIC ───────────────────────────────────────────────────────
-
     # Ownership check — only if user is logged in
     if current_user:
         conv = get_conversation_by_id(req.conversation_id)
-
-        # ── DIAGNOSTIC (temporary) ──────────────────────────────────────────
-        print(f"[DIAG /chat] get_conversation_by_id({req.conversation_id!r}) -> {conv!r}")
-        # ── END DIAGNOSTIC ───────────────────────────────────────────────────
-
         if not conv:
-            # ── DIAGNOSTIC (temporary) ───────────────────────────────────────
-            print("[DIAG /chat] NOT FOUND — this is the 404. Compare the id above "
-                  "against the id [DIAG /conversation] printed when it was created.")
-            # ── END DIAGNOSTIC ────────────────────────────────────────────────
             return JSONResponse(status_code=404, content={"response": "Conversation not found"})
         if conv.user_id and str(conv.user_id) != str(current_user.id):
-            # ── DIAGNOSTIC (temporary) ───────────────────────────────────────
-            print(f"[DIAG /chat] OWNERSHIP MISMATCH: conv.user_id={conv.user_id!r} "
-                  f"vs current_user.id={current_user.id!r}")
-            # ── END DIAGNOSTIC ────────────────────────────────────────────────
             return JSONResponse(status_code=403, content={"response": "Access denied"})
 
     try:
@@ -502,26 +482,9 @@ async def upload_file(file: UploadFile = File(...)):
 # ══════════════════════════════════════════════════════════════════════════════
 @app.post("/conversation")
 def new_conversation(req: ConversationRequest, current_user=Depends(get_optional_user)):
-    # ── DIAGNOSTIC (temporary) ──────────────────────────────────────────────
-    print(f"[DIAG /conversation] current_user = {current_user!r}")
-    # ── END DIAGNOSTIC ───────────────────────────────────────────────────────
-
     if not current_user:
-        # ── DIAGNOSTIC (temporary) ───────────────────────────────────────────
-        print("[DIAG /conversation] no current_user -> returning 401")
-        # ── END DIAGNOSTIC ────────────────────────────────────────────────────
         return JSONResponse(status_code=401, content={"message": "Sign in to save your conversations"})
-
-    # ── DIAGNOSTIC (temporary) ────────────────────────────────────────────────
-    print(f"[DIAG /conversation] current_user.id = {current_user.id!r} (type={type(current_user.id)})")
-    # ── END DIAGNOSTIC ─────────────────────────────────────────────────────────
-
     conversation = create_conversation(req.title, user_id=str(current_user.id))
-
-    # ── DIAGNOSTIC (temporary) ────────────────────────────────────────────────
-    print(f"[DIAG /conversation] created conversation.id = {conversation.id!r} (type={type(conversation.id)})")
-    # ── END DIAGNOSTIC ─────────────────────────────────────────────────────────
-
     return {"id": str(conversation.id), "title": conversation.title}
 
 

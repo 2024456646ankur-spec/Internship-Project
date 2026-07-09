@@ -1,164 +1,105 @@
-```json
-{
-  "whyThisPlan": "This plan is tailored to the user's beginner and intermediate pillar ratings, with a focus on DSA and system design. The first 6 weeks focus on building a strong foundation in DSA, language, and CS fundamentals. The next 4 weeks cover system design, behavioral basics, and practice mixed problems. The final 2 weeks are dedicated to resume polish and mock interview preparation. This allocation ensures a well-rounded preparation for the SDE 1 full-time role.",
-  "mockInterviewStartWeek": 8,
-  "weeks": [
-    {
-      "weekNumber": 1,
-      "theme": "DSA Fundamentals",
-      "topics": ["Arrays", "Strings", "Big O notation"],
-      "resources": ["CTCI Chapter 1", "LeetCode Arrays 101"],
-      "practiceTargets": ["Complete 15 LeetCode easy array problems", "Implement binary search on arrays"],
-      "tools": ["Python", "LeetCode"],
-      "milestone": "Understand the basics of arrays and strings, and be able to solve simple problems",
-      "checklistItems": [
-        { "id": "w1_c1", "label": "Complete CTCI Chapter 1", "done": false },
-        { "id": "w1_c2", "label": "Solve 15 LeetCode easy array problems", "done": false }
-      ]
-    },
-    {
-      "weekNumber": 2,
-      "theme": "DSA Fundamentals",
-      "topics": ["Arrays", "Strings", "Two-pointer technique"],
-      "resources": ["CTCI Chapter 2", "LeetCode Two Pointers 101"],
-      "practiceTargets": ["Complete 15 LeetCode medium array problems with two-pointer technique", "Implement string reversal using two pointers"],
-      "tools": ["Python", "LeetCode"],
-      "milestone": "Master the two-pointer technique and be able to solve medium-level array problems",
-      "checklistItems": [
-        { "id": "w2_c1", "label": "Complete CTCI Chapter 2", "done": false },
-        { "id": "w2_c2", "label": "Solve 15 LeetCode medium array problems with two-pointer technique", "done": false }
-      ]
-    },
-    {
-      "weekNumber": 3,
-      "theme": "Language Fundamentals",
-      "topics": ["Python basics", "Data structures in Python"],
-      "resources": ["Python documentation", "Introduction to Python programming"],
-      "practiceTargets": ["Complete 15 Python problems on LeetCode", "Implement data structures in Python"],
-      "tools": ["Python", "LeetCode"],
-      "milestone": "Master Python basics and be able to implement data structures",
-      "checklistItems": [
-        { "id": "w3_c1", "label": "Complete Python documentation", "done": false },
-        { "id": "w3_c2", "label": "Solve 15 Python problems on LeetCode", "done": false }
-      ]
-    },
-    {
-      "weekNumber": 4,
-      "theme": "CS Fundamentals",
-      "topics": ["Algorithm complexity", "Trade-offs"],
-      "resources": ["MIT 6.006 lectures", "Introduction to Algorithms Chapter 2"],
-      "practiceTargets": ["Complete 10 LeetCode problems with varying complexities", "Analyze the trade-offs of different algorithms"],
-      "tools": ["Python", "LeetCode"],
-      "milestone": "Understand algorithm complexity and be able to analyze trade-offs",
-      "checklistItems": [
-        { "id": "w4_c1", "label": "Complete MIT 6.006 lectures on algorithm complexity", "done": false },
-        { "id": "w4_c2", "label": "Solve 10 LeetCode problems with varying complexities", "done": false }
-      ]
-    },
-    {
-      "weekNumber": 5,
-      "theme": "DSA Mixed Problems",
-      "topics": ["Mixed problems on arrays, trees, graphs"],
-      "resources": ["LeetCode Mixed Problems 101", "Neetcode 150"],
-      "practiceTargets": ["Complete 20 LeetCode mixed problems", "Focus on solving problems under time pressure"],
-      "tools": ["Python", "LeetCode"],
-      "milestone": "Be able to solve mixed problems under time pressure",
-      "checklistItems": [
-        { "id": "w5_c1", "label": "Complete LeetCode Mixed Problems 101", "done": false },
-        { "id": "w5_c2", "label": "Solve 20 LeetCode mixed problems", "done": false }
-      ]
-    },
-    {
-      "weekNumber": 6,
-      "theme": "DSA Mixed Problems",
-      "topics": ["Mixed problems on arrays, trees, graphs"],
-      "resources": ["LeetCode Mixed Problems 101", "Neetcode 150"],
-      "practiceTargets": ["Complete 25 LeetCode mixed problems", "Focus on solving problems under time pressure"],
-      "tools": ["Python", "LeetCode"],
-      "milestone": "Improve problem-solving skills and be able to solve mixed problems under time pressure",
-      "checklistItems": [
-        { "id": "w6_c1", "label": "Complete LeetCode Mixed Problems 101", "done": false },
-        { "id": "w6_c2", "label": "Solve 25 LeetCode mixed problems", "done": false }
-      ]
-    },
-    {
-      "weekNumber": 7,
-      "theme": "System Design Fundamentals",
-      "topics": ["Introduction to system design", "Scalability and databases"],
-      "resources": ["Designing Data-Intensive Applications Chapter 1", "System Design Primer"],
-      "practiceTargets": ["Complete 5 system design problems on LeetCode", "Design a simple system with scalability and databases"],
-      "tools": ["Python", "LeetCode"],
-      "milestone": "Understand system design fundamentals and be able to solve simple problems",
-      "checklistItems": [
-        { "id": "w7_c1", "label": "Complete Designing Data-Intensive Applications Chapter 1", "done": false },
-        { "id": "w7_c2", "label": "Solve 5 system design problems on LeetCode", "done": false }
-      ]
-    },
-    {
-      "weekNumber": 8,
-      "theme": "Behavioral Basics and Mock Interviews",
-      "topics": ["Introduction to behavioral questions", "Common behavioral question types"],
-      "resources": ["Glassdoor", "LeetCode Behavioral Questions"],
-      "practiceTargets": ["Complete 10 behavioral questions practice sessions", "Improve answering skills"],
-      "tools": ["Python", "LeetCode"],
-      "milestone": "Improve answering skills and be able to answer behavioral questions confidently",
-      "checklistItems": [
-        { "id": "w8_c1", "label": "Complete 10 behavioral questions practice sessions on Glassdoor", "done": false },
-        { "id": "w8_c2", "label": "Practice answering behavioral questions with a partner for 5 hours", "done": false }
-      ]
-    },
-    {
-      "weekNumber": 9,
-      "theme": "Mock Interviews and Practice",
-      "topics": ["Mock interviews", "Whiteboarding practice"],
-      "resources": ["Pramp", "LeetCode Mock Interviews"],
-      "practiceTargets": ["Complete 5 mock interviews", "Practice whiteboarding with a partner"],
-      "tools": ["Python", "LeetCode"],
-      "milestone": "Improve whiteboarding skills and be able to solve problems under time pressure",
-      "checklistItems": [
-        { "id": "w9_c1", "label": "Complete 5 mock interviews on Pramp", "done": false },
-        { "id": "w9_c2", "label": "Practice whiteboarding with a partner for 5 hours", "done": false }
-      ]
-    },
-    {
-      "weekNumber": 10,
-      "theme": "Mock Interviews and Practice",
-      "topics": ["Mock interviews", "Whiteboarding practice"],
-      "resources": ["Pramp", "LeetCode Mock Interviews"],
-      "practiceTargets": ["Complete 5 mock interviews", "Practice whiteboarding with a partner"],
-      "tools": ["Python", "LeetCode"],
-      "milestone": "Improve whiteboarding skills and be able to solve problems under time pressure",
-      "checklistItems": [
-        { "id": "w10_c1", "label": "Complete 5 mock interviews on Pramp", "done": false },
-        { "id": "w10_c2", "label": "Practice whiteboarding with a partner for 5 hours", "done": false }
-      ]
-    },
-    {
-      "weekNumber": 11,
-      "theme": "Resume Polish and Mock Interview Intensive",
-      "topics": ["Resume polish", "Mock interview practice"],
-      "resources": ["Resume guide", "LeetCode Mock Interviews"],
-      "practiceTargets": ["Polish resume and cover letter", "Practice mock interviews with a partner"],
-      "tools": ["Python", "LeetCode"],
-      "milestone": "Finalize resume and cover letter, and improve interview skills",
-      "checklistItems": [
-        { "id": "w11_c1", "label": "Polish resume and cover letter", "done": false },
-        { "id": "w11_c2", "label": "Practice mock interviews with a partner for 10 hours", "done": false }
-      ]
-    },
-    {
-      "weekNumber": 12,
-      "theme": "Resume Polish and Mock Interview Intensive",
-      "topics": ["Final resume polish", "Final mock interview practice"],
-      "resources": ["Resume guide", "LeetCode Mock Interviews"],
-      "practiceTargets": ["Finalize resume and cover letter", "Practice mock interviews with a partner"],
-      "tools": ["Python", "LeetCode"],
-      "milestone": "Finalize resume and cover letter, and be ready for the interview",
-      "checklistItems": [
-        { "id": "w12_c1", "label": "Finalize resume and cover letter", "done": false },
-        { "id": "w12_c2", "label": "Practice mock interviews with a partner for 10 hours", "done": false }
-      ]
-    }
-  ]
+## Code Analysis
+
+### Purpose
+The given Python code performs a breadth-first search (BFS) on a graph. It takes in a graph represented as an adjacency list and a starting node, and then prints the visited nodes in the order they are visited.
+
+### Step-by-Step Breakdown
+
+1. **Initialization**:
+   - A `visited` set is initialized to keep track of visited nodes.
+   - A `queue` is initialized with the `start` node, and the `start` node is added to the `visited` set.
+2. **BFS Loop**:
+   - The loop continues until the `queue` is empty.
+   - In each iteration, the front node (`node`) is dequeued from the `queue`.
+   - The `node` is printed.
+   - For each `neighbor` of the `node`, if the `neighbor` has not been visited, it is added to the `queue` and marked as visited.
+3. **Example Usage**:
+   - An example graph is provided, represented as an adjacency list.
+   - The `bfs` function is called with the example graph and a starting node ('A').
+
+### Bugs and Edge Cases
+
+1. **Lack of Error Handling**:
+   - The code does not check if the `start` node exists in the graph.
+   - The code does not handle the case where the graph is empty or None.
+2. **Missing Return Value**:
+   - The function documentation mentions that it returns a set of visited nodes, but the function actually does not return anything (it prints the visited nodes instead).
+3. **Assumes Adjacency List Representation**:
+   - The code assumes that the input graph is in adjacency list representation, but it does not validate this assumption.
+4. **No Handling for Disconnected Graphs**:
+   - The code will only visit nodes that are reachable from the `start` node. If the graph is disconnected, nodes in other components will not be visited.
+
+### Performance Issues
+
+1. **Inefficient Data Structures**:
+   - The code uses a set to keep track of visited nodes, which is efficient.
+   - The code uses a deque to implement the queue, which is also efficient.
+2. **No Optimization for Large Graphs**:
+   - The code does not have any optimizations for handling large graphs, such as using a more efficient data structure or using parallel processing.
+
+### Fixes and Suggestions
+
+1. **Add Error Handling**:
+   - Check if the `start` node exists in the graph and raise an error if it does not.
+   - Handle the case where the graph is empty or None.
+2. **Return Visited Nodes Instead of Printing**:
+   - Modify the function to return the `visited` set instead of printing the visited nodes.
+3. **Validate Graph Representation**:
+   - Add a check to ensure that the input graph is in adjacency list representation.
+4. **Handle Disconnected Graphs**:
+   - If the graph is disconnected, consider visiting all nodes in the graph, or provide an option to visit only nodes reachable from the `start` node.
+5. **Optimize for Large Graphs**:
+   - Consider using a more efficient data structure, such as a hash table or a Bloom filter, to keep track of visited nodes.
+   - Consider using parallel processing to speed up the BFS algorithm for large graphs.
+
+Here's an updated version of the code that addresses some of these issues:
+```python
+from collections import deque
+
+def bfs(graph, start):
+    """
+    Performs a breadth-first search on a graph.
+    
+    Args:
+    graph (dict): Adjacency list representation of the graph.
+    start (node): Starting node for the search.
+    
+    Returns:
+    visited (set): Set of visited nodes.
+    
+    Raises:
+    ValueError: If the start node is not in the graph.
+    """
+    if start not in graph:
+        raise ValueError("Start node not found in graph")
+    
+    visited = set()
+    queue = deque([start])
+    visited.add(start)
+    
+    while queue:
+        node = queue.popleft()
+        
+        for neighbor in graph[node]:
+            if neighbor not in visited:
+                queue.append(neighbor)
+                visited.add(neighbor)
+    
+    return visited
+
+# Example usage:
+graph = {
+    'A': ['B', 'C'],
+    'B': ['A', 'D', 'E'],
+    'C': ['A', 'F'],
+    'D': ['B'],
+    'E': ['B', 'F'],
+    'F': ['C', 'E']
 }
+
+try:
+    visited = bfs(graph, 'A')
+    print("Visited nodes:", visited)
+except ValueError as e:
+    print("Error:", e)
 ```

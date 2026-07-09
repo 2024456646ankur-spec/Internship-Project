@@ -6,8 +6,6 @@ import {
   oneDark,
   dracula,
   atomDark,
-  oneLight,
-  prism as githubLight,
 } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { useAuth } from "../Auth/AuthContext";
 import { usePrefs } from "../Auth/PrefsContext";
@@ -15,13 +13,13 @@ import LoginProgressSummary from "../pages/roadmap/LoginProgressSummary.jsx";
 
 const API = "http://127.0.0.1:8000";
 
-// ── Claude-style code theme (dark) ────────────────────────────────────────────
+// ── Claude-style code theme ───────────────────────────────────────────────────
 // A hand-tuned Prism token map, not a repaint of an imported theme. Available
 // as a defensive fallback if prefs.codeTheme ever resolves to nothing — the
 // editor's actual colors are driven by whichever theme is selected in
 // Personalization (see CODE_THEMES below), matching the existing Theme
 // dropdown behavior rather than overriding it.
-const claudeCodeThemeDark = {
+const claudeCodeTheme = {
   'code[class*="language-"]': { color: "#e8e6e3", fontFamily: "'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace", fontSize: "13.5px", lineHeight: 1.7, direction: "ltr", textAlign: "left", whiteSpace: "pre", wordSpacing: "normal", wordBreak: "normal", tabSize: 4, hyphens: "none" },
   'pre[class*="language-"]': { color: "#e8e6e3", background: "none", fontFamily: "'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace", fontSize: "13.5px", lineHeight: 1.7, direction: "ltr", textAlign: "left", whiteSpace: "pre", wordSpacing: "normal", wordBreak: "normal", tabSize: 4, hyphens: "none" },
   comment: { color: "#6e7681", fontStyle: "italic" },
@@ -54,67 +52,15 @@ const claudeCodeThemeDark = {
   url: { color: "#9fca8f" },
 };
 
-// ── Claude-style code theme (light) ───────────────────────────────────────────
-// Same token map, recolored for a light --code-bg (#fafafa, see PrefsContext
-// [data-theme="light"]). This is what was missing before: claudeCodeTheme had
-// no light counterpart, so it stayed dark-on-light regardless of Theme setting.
-const claudeCodeThemeLight = {
-  'code[class*="language-"]': { color: "#1f1f1f", fontFamily: "'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace", fontSize: "13.5px", lineHeight: 1.7, direction: "ltr", textAlign: "left", whiteSpace: "pre", wordSpacing: "normal", wordBreak: "normal", tabSize: 4, hyphens: "none" },
-  'pre[class*="language-"]': { color: "#1f1f1f", background: "none", fontFamily: "'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace", fontSize: "13.5px", lineHeight: 1.7, direction: "ltr", textAlign: "left", whiteSpace: "pre", wordSpacing: "normal", wordBreak: "normal", tabSize: 4, hyphens: "none" },
-  comment: { color: "#8a8f98", fontStyle: "italic" },
-  prolog: { color: "#8a8f98" },
-  doctype: { color: "#8a8f98" },
-  cdata: { color: "#8a8f98" },
-  punctuation: { color: "#57606a" },
-  "attr-name": { color: "#8a6d1f" },
-  "class-name": { color: "#a35f1f" },
-  boolean: { color: "#9c4f3f" },
-  constant: { color: "#9c4f3f" },
-  number: { color: "#9c4f3f" },
-  atrule: { color: "#7c3aed" },
-  keyword: { color: "#7c3aed" },
-  property: { color: "#0f7b8a" },
-  tag: { color: "#b8384a" },
-  symbol: { color: "#9c4f3f" },
-  deleted: { color: "#b8384a" },
-  important: { color: "#a35f1f" },
-  selector: { color: "#2f7d3f" },
-  string: { color: "#2f7d3f" },
-  char: { color: "#2f7d3f" },
-  builtin: { color: "#0f7b8a" },
-  inserted: { color: "#2f7d3f" },
-  regex: { color: "#2f7d3f" },
-  "attr-value": { color: "#2f7d3f" },
-  variable: { color: "#1f1f1f" },
-  operator: { color: "#57606a" },
-  function: { color: "#1560ad" },
-  url: { color: "#2f7d3f" },
-};
-
-// ── Code theme map — dark and light variants ─────────────────────────────────
+// ── Code theme map ────────────────────────────────────────────────────────────
 // "github" and "monokai" aren't in prism's esm dist by default so we use
-// close equivalents that ARE available. Light variants added so the Theme
-// dropdown (dark/light/system) actually repaints code, not just chat chrome.
-// "monokai" has no bundled light equivalent; it falls back to prism/github-light
-// in light mode rather than staying dark, so it's never left unstyled.
-const CODE_THEMES_DARK = {
+// close equivalents that ARE available.
+const CODE_THEMES = {
   oneDark,
   github:  atomDark,   // light-ish alternative; swap if you install github style
   dracula,
   monokai: atomDark,   // swap for monokai if you install it
 };
-
-const CODE_THEMES_LIGHT = {
-  oneDark: oneLight,
-  github:  githubLight,
-  dracula: oneLight,   // dracula has no official light variant; nearest neutral light
-  monokai: githubLight,
-};
-
-function getCodeStyle(codeThemeKey, resolvedTheme) {
-  const map = resolvedTheme === "light" ? CODE_THEMES_LIGHT : CODE_THEMES_DARK;
-  return map[codeThemeKey] ?? (resolvedTheme === "light" ? oneLight : oneDark);
-}
 
 // ── Font size map ─────────────────────────────────────────────────────────────
 const FONT_SIZES = { small: 13, medium: 15, large: 17 };
@@ -462,7 +408,7 @@ function LineNumberedEditor({ value, onChange, textareaRef, onKeyDown, language,
   const gutterRef  = useRef(null);
   const highlightRef = useRef(null);
   const lines = value.split("\n").length;
-  const activeStyle = codeStyle ?? oneDark;
+  const activeStyle = codeStyle ?? claudeCodeTheme;
 
   const syncScroll = () => {
     if (!textareaRef.current) return;
@@ -499,9 +445,7 @@ function LineNumberedEditor({ value, onChange, textareaRef, onKeyDown, language,
       <div style={{ flex: 1, position: "relative", overflow: "hidden" }}>
         {/* Highlighted display layer — read only, sits behind the textarea.
             Colors come from whichever theme is selected in Personalization
-            (One Dark / GitHub / Dracula / Monokai) crossed with the current
-            resolved Theme (dark/light/system) — see getCodeStyle() in the
-            module scope above. */}
+            (One Dark / GitHub / Dracula / Monokai), not a fixed palette. */}
         <div
           ref={highlightRef}
           aria-hidden="true"
@@ -937,37 +881,6 @@ function fileIcon(type) {
   return "📝";
 }
 
-// ── Resolved theme watcher ────────────────────────────────────────────────────
-// PrefsContext writes the RESOLVED theme ("dark" | "light") onto
-// document.documentElement's data-theme attribute — including when
-// prefs.theme === "system", where the raw pref value isn't "light"/"dark" at
-// all. Reading prefs.theme directly would misdetect "system" as neither, so
-// this hook reads the actual attribute PrefsContext already maintains, and
-// re-reads it on:
-//   1. attribute mutation (Theme dropdown changed dark<->light directly)
-//   2. OS-level scheme change while prefs.theme === "system"
-//      (PrefsContext's own effect updates the attribute; this just observes it)
-function useResolvedTheme() {
-  const [resolved, setResolved] = useState(() =>
-    typeof document !== "undefined"
-      ? document.documentElement.getAttribute("data-theme") ?? "dark"
-      : "dark"
-  );
-
-  useEffect(() => {
-    if (typeof document === "undefined") return;
-    const target = document.documentElement;
-    const read = () => setResolved(target.getAttribute("data-theme") ?? "dark");
-
-    read();
-    const observer = new MutationObserver(read);
-    observer.observe(target, { attributes: true, attributeFilter: ["data-theme"] });
-    return () => observer.disconnect();
-  }, []);
-
-  return resolved;
-}
-
 // ── Mic Button ────────────────────────────────────────────────────────────────
 const SILENCE_TIMEOUT_MS = 5000;
 
@@ -1125,8 +1038,7 @@ export default function SearchApp({
   const fontSize    = FONT_SIZES[prefs.fontSize] ?? 15;
   const msgGap      = prefs.compactMode ? 14 : 30;
   const msgPadV     = prefs.compactMode ? "9px" : "12px";
-  const resolvedTheme = useResolvedTheme(); // "dark" | "light" — handles prefs.theme === "system"
-  const codeStyle   = getCodeStyle(prefs.codeTheme, resolvedTheme);
+  const codeStyle   = CODE_THEMES[prefs.codeTheme] ?? oneDark;
   const showTime    = prefs.timestamps;
   const transition  = prefs.animations ? "background 0.3s ease" : "none";
 

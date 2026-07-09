@@ -4,10 +4,7 @@
  * calls the existing /chat backend, parses the JSON response into a Roadmap.
  *
  * API: POST /chat — same endpoint used by PublicSpeakingPage and the main chat.
- *   ChatRequest requires a REAL conversation_id (str, no default) — the backend
- *   uses it to fetch conversation history and check ownership, so we must create
- *   a conversation first via POST /conversation, then use its returned id.
- *   Body: { message: string, conversation_id: string }
+ *   Body: { message: string, conversation_id: null }
  *   Response: { response: string } — expected to contain JSON roadmap
  *
  * Props:
@@ -149,59 +146,6 @@ function assignCalendarDates(weeks, startDate = new Date()) {
   });
 }
 
-// ─── Ensure we have a real conversation_id before calling /chat ──────────────
-// The backend's ChatRequest.conversation_id is a required `str` with no default,
-// and the /chat handler uses it to create_message() / get_messages() against a
-// real Conversation row. Sending null (or a made-up id) fails validation or
-// 404s, so we create a conversation first and reuse its id for this session.
-//
-// Exported so other flows that need to hit /chat (e.g. ProgressTracker's
-// compression flow) reuse this exact logic instead of reimplementing it —
-// a previous bug came from a second, incorrect copy that sent conversation_id: null.
-//
-// forceNew=true skips the sessionStorage cache and always creates a fresh
-// conversation. Used as a self-heal when the cached id turns out to be stale
-// (e.g. backend restarted / DB reset / conversation was deleted server-side).
-export async function ensureConversationId(headers, forceNew = false) {
-  const cached = sessionStorage.getItem("friday.roadmapConversationId");
-  if (cached && !forceNew) {
-    console.log("[RoadmapGenerator] using cached conversation_id:", cached);
-    return cached;
-  }
-
-  console.log("[RoadmapGenerator] creating new conversation...");
-  const res = await fetch(`${API}/conversation`, {
-    method: "POST",
-    headers,
-    body: JSON.stringify({ title: "Career Roadmap" }),
-  });
-
-  if (!res.ok) {
-    // Most common cause here: 401 — /conversation requires a logged-in user
-    // (get_optional_user still returns None for an invalid/expired token,
-    // and the route explicitly rejects that case with 401).
-    if (res.status === 401) {
-      throw new Error("Please sign in to generate a roadmap — conversations are saved to your account.");
-    }
-    throw new Error(`Couldn't start a session: ${res.status}`);
-  }
-
-  const data = await res.json();
-  console.log("[RoadmapGenerator] /conversation response:", data);
-
-  // Defensive: different backend response shapes have been seen in this repo
-  // (bare {id}, {conversation_id}, or nested {conversation: {id}}). If your
-  // backend always returns one specific shape, feel free to simplify this
-  // to just `data.id`.
-  const newId = data.id ?? data.conversation_id ?? data.conversation?.id;
-  if (!newId) {
-    throw new Error("Backend didn't return a conversation id — check the /conversation response shape.");
-  }
-
-  sessionStorage.setItem("friday.roadmapConversationId", newId);
-  return newId;
-}
-
 // ─── Loading state UI ─────────────────────────────────────────────────────────
 function LoadingState({ stage }) {
   const stages = [
@@ -304,47 +248,15 @@ export default function RoadmapGenerator({
       const headers = { "Content-Type": "application/json" };
       if (token) headers["Authorization"] = `Bearer ${token}`;
 
-      // Backend requires a real conversation_id (str, required, no default) —
-      // create one (or reuse this tab's cached one) before calling /chat.
-      let conversationId = await ensureConversationId(headers);
-
       setLoadingStage(3);
-      let res = await fetch(`${API}/chat`, {
+      const res = await fetch(`${API}/chat`, {
         method: "POST",
         headers,
-        body: JSON.stringify({ message: prompt, conversation_id: conversationId }),
+        body: JSON.stringify({ message: prompt, conversation_id: null }),
       });
 
-      // Self-heal: if the cached conversation_id is stale (e.g. backend was
-      // restarted / DB reset / conversation deleted server-side), the cache
-      // will keep returning the same dead id forever unless we clear it and
-      // retry once with a freshly created conversation.
-      if (res.status === 404) {
-        console.warn(
-          "[RoadmapGenerator] /chat 404'd for cached conversation_id, retrying with a new conversation:",
-          conversationId
-        );
-        sessionStorage.removeItem("friday.roadmapConversationId");
-        conversationId = await ensureConversationId(headers, /* forceNew */ true);
-
-        res = await fetch(`${API}/chat`, {
-          method: "POST",
-          headers,
-          body: JSON.stringify({ message: prompt, conversation_id: conversationId }),
-        });
-      }
-
       if (!res.ok) {
-        // Surface the backend's actual validation/error detail instead of
-        // just the status code, so failures are debuggable from the UI.
-        let detail = "";
-        try {
-          const errBody = await res.json();
-          detail = errBody?.detail
-            ? (Array.isArray(errBody.detail) ? JSON.stringify(errBody.detail) : errBody.detail)
-            : (errBody?.response ?? "");
-        } catch {}
-        throw new Error(`Server error: ${res.status}${detail ? ` — ${detail}` : ""}`);
+        throw new Error(`Server error: ${res.status}`);
       }
 
       const data = await res.json();

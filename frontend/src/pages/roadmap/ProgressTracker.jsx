@@ -11,7 +11,6 @@
  *     handleCompress, handleDismiss, isCompressing }
  */
 import { useState, useCallback, useMemo } from "react";
-import { ensureConversationId } from "./RoadmapGenerator.jsx";
 
 const API = "http://127.0.0.1:8000";
 
@@ -40,11 +39,6 @@ function getDaysRemainingInWeek(week) {
 }
 
 // ── LLM compression prompt ────────────────────────────────────────────────────
-// NOTE: previously this sent conversation_id: null directly, which the backend
-// rejects (ChatRequest.conversation_id is a required str with no default) —
-// that caused the "Conversation not found" 404s from the Compress flow.
-// Now reuses the same ensureConversationId() helper RoadmapGenerator uses,
-// including its stale-cache self-heal on a 404 retry below.
 async function requestCompression(roadmap, currentWeekNumber) {
   const remainingWeeks = roadmap.weeks.filter((w) => w.weekNumber >= currentWeekNumber);
   const originalEndDate = roadmap.weeks[roadmap.weeks.length - 1]?.calendarStartDate;
@@ -80,43 +74,11 @@ Return ONLY valid JSON (no markdown):
   const headers = { "Content-Type": "application/json" };
   if (token) headers["Authorization"] = `Bearer ${token}`;
 
-  // Get a REAL conversation_id (creates one or reuses the cached one) —
-  // this was the bug: it used to send conversation_id: null here.
-  let conversationId = await ensureConversationId(headers);
-
-  let res = await fetch(`${API}/chat`, {
+  const res = await fetch(`${API}/chat`, {
     method: "POST",
     headers,
-    body: JSON.stringify({ message: prompt, conversation_id: conversationId }),
+    body: JSON.stringify({ message: prompt, conversation_id: null }),
   });
-
-  // Same self-heal as RoadmapGenerator: a stale cached conversation_id
-  // (e.g. backend restarted / DB reset) would otherwise 404 forever.
-  if (res.status === 404) {
-    console.warn(
-      "[ProgressTracker] /chat 404'd for cached conversation_id, retrying with a new conversation:",
-      conversationId
-    );
-    sessionStorage.removeItem("friday.roadmapConversationId");
-    conversationId = await ensureConversationId(headers, /* forceNew */ true);
-
-    res = await fetch(`${API}/chat`, {
-      method: "POST",
-      headers,
-      body: JSON.stringify({ message: prompt, conversation_id: conversationId }),
-    });
-  }
-
-  if (!res.ok) {
-    let detail = "";
-    try {
-      const errBody = await res.json();
-      detail = errBody?.detail
-        ? (Array.isArray(errBody.detail) ? JSON.stringify(errBody.detail) : errBody.detail)
-        : (errBody?.response ?? "");
-    } catch {}
-    throw new Error(`Server error: ${res.status}${detail ? ` — ${detail}` : ""}`);
-  }
 
   const data = await res.json();
   const raw = data.response || data.message || "";
