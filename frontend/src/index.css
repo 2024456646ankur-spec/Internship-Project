@@ -1,0 +1,336 @@
+@import "tailwindcss";
+
+
+/* ── Global resets ─────────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', system-ui, sans-serif;
+  background-color: #0d1117;
+  color: #e6edf3;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── Custom scrollbar ──────────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #161b22;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #30363d;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #3d444d;
+}
+
+/* ── Glassmorphism utility ─────────────────────────────────────────────── */
+.glass {
+  background: rgba(22, 27, 34, 0.8);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(48, 54, 61, 0.6);
+}
+
+.glass-light {
+  background: rgba(48, 54, 61, 0.5);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* ── Gradient text ─────────────────────────────────────────────────────── */
+.gradient-text {
+  background: linear-gradient(135deg, #5c7cfa 0%, #f783ac 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-gold {
+  background: linear-gradient(135deg, #f8c93a 0%, #f77f3a 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Glow effects ──────────────────────────────────────────────────────── */
+.glow-brand {
+  box-shadow: 0 0 20px rgba(92, 124, 250, 0.4), 0 0 60px rgba(92, 124, 250, 0.1);
+}
+
+.glow-accent {
+  box-shadow: 0 0 20px rgba(231, 73, 128, 0.4), 0 0 60px rgba(231, 73, 128, 0.1);
+}
+
+/* ── Monaco editor dark overrides ──────────────────────────────────────── */
+.monaco-editor-container {
+  border-radius: 0.5rem;
+  overflow: hidden;
+  border: 1px solid #30363d;
+}
+
+/* ── xterm.js container ────────────────────────────────────────────────── */
+.terminal-container {
+  background: #0d1117;
+  padding: 8px;
+  border-radius: 0 0 0.5rem 0.5rem;
+  border: 1px solid #30363d;
+  border-top: none;
+}
+
+.terminal-container .xterm {
+  padding: 4px;
+}
+
+/* ── Engagement meter ──────────────────────────────────────────────────── */
+.engagement-bar {
+  transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ── Avatar canvas ─────────────────────────────────────────────────────── */
+.avatar-canvas {
+  border-radius: 1rem;
+  background: radial-gradient(ellipse at center, #1a2040 0%, #0d1117 70%);
+}
+
+/* ── Nudge toast ───────────────────────────────────────────────────────── */
+.nudge-toast {
+  background: linear-gradient(135deg, rgba(92, 124, 250, 0.15), rgba(247, 131, 172, 0.15));
+  border: 1px solid rgba(92, 124, 250, 0.3);
+  backdrop-filter: blur(16px);
+  animation: slideInRight 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ── Report card ───────────────────────────────────────────────────────── */
+.report-prose h1,
+.report-prose h2,
+.report-prose h3 {
+  color: #e6edf3;
+  margin-top: 1.5rem;
+}
+
+.report-prose h2 {
+  color: #5c7cfa;
+}
+
+.report-prose code {
+  background: #21262d;
+  padding: 0.1em 0.35em;
+  border-radius: 4px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.875em;
+}
+
+.report-prose pre {
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  padding: 1rem;
+  overflow-x: auto;
+}
+
+.report-prose blockquote {
+  border-left: 3px solid #5c7cfa;
+  padding-left: 1rem;
+  color: #8b949e;
+  font-style: italic;
+}
+
+/* ── Animations ────────────────────────────────────────────────────────── */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #21262d 25%, #30363d 50%, #21262d 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 6px;
+}
+
+/* ── Stage transition overlay ──────────────────────────────────────────── */
+.stage-enter {
+  animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+:root {
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-bg-hover: rgba(255, 255, 255, 0.07);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-border-hover: rgba(255, 255, 255, 0.16);
+  --mesh-a: #6d28d9;
+  --mesh-b: #1d4ed8;
+  --mesh-c: #7c3aed;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  background-color: #0a0a0f;
+  color: #f1f5f9; /* slate-100 */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-family: "Inter", system-ui, sans-serif;
+}
+
+/* Signature background: layered radial mesh, slow ambient drift. */
+.mesh-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  background: #0a0a0f;
+}
+
+.mesh-bg::before,
+.mesh-bg::after {
+  content: "";
+  position: absolute;
+  width: 60vw;
+  height: 60vw;
+  border-radius: 9999px;
+  filter: blur(120px);
+  opacity: 0.28;
+}
+
+.mesh-bg::before {
+  top: -15%;
+  left: -10%;
+  background: radial-gradient(circle, var(--mesh-a), transparent 70%);
+  animation: mesh-drift 24s ease-in-out infinite;
+}
+
+.mesh-bg::after {
+  bottom: -20%;
+  right: -10%;
+  background: radial-gradient(circle, var(--mesh-b), transparent 70%);
+  animation: mesh-drift 28s ease-in-out infinite reverse;
+}
+
+.mesh-bg .mesh-mid {
+  position: absolute;
+  top: 30%;
+  left: 40%;
+  width: 45vw;
+  height: 45vw;
+  border-radius: 9999px;
+  background: radial-gradient(circle, var(--mesh-c), transparent 72%);
+  filter: blur(130px);
+  opacity: 0.16;
+  animation: mesh-drift 32s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .mesh-bg::before,
+  .mesh-bg::after,
+  .mesh-bg .mesh-mid {
+    animation: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* Utility: gradient text */
+.text-gradient {
+  background-image: linear-gradient(135deg, var(--grad-from, #8b5cf6), var(--grad-to, #3b82f6));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Utility: focus ring, visible + on-brand */
+.focus-ring {
+  outline: none;
+}
+
+.focus-ring:focus-visible {
+  box-shadow: 0 0 0 2px #0a0a0f, 0 0 0 4px rgba(139, 92, 246, 0.7);
+}
+
+.font-mono-tabular {
+  font-family: "JetBrains Mono", "Fira Code", monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── mesh-drift ambient animation ──────────────────────────────────────────── */
+@keyframes mesh-drift {
+  0%   { transform: translate(0, 0) scale(1); }
+  33%  { transform: translate(5%, 8%) scale(1.06); }
+  66%  { transform: translate(-6%, 3%) scale(0.97); }
+  100% { transform: translate(0, 0) scale(1); }
+}
+
+/* ── NeuralQuiz: bg-base-950 fallback (Tailwind v4 compatibility) ─────────── */
+.bg-base-950 {
+  background-color: #0a0a0f;
+}

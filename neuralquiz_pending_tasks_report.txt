@@ -1,0 +1,214 @@
+Prompt to build the Daily Challenge and Progress Dashboard modules
+
+Build two fully featured modules for my existing AI-powered career preparation platform: Daily Challenge and Overall Progress Dashboard. The application already includes modules such as Interview, Public Speaking, NeuralQuiz, and Career Roadmap. The new modules must integrate seamlessly with the existing sidebar, authentication system, user profile, and Career Roadmap data.
+
+Daily Challenge module
+Goal
+
+Create a module that automatically generates or assigns new challenges every day based on the user’s target company, career roadmap stage, and previous progress.
+
+Requirements
+
+Generate fresh daily challenges automatically at midnight in the user’s local time.
+
+Personalize challenges using the target company selected in Career Roadmap, the current roadmap stage, the user’s performance and weak areas, and existing modules such as Interview, Public Speaking, and NeuralQuiz.
+
+Support challenge categories including Coding/DSA, Technical Interview Questions, HR Interview Questions, Public Speaking Tasks, Quizzes, System Design Tasks, and Company-Specific Preparation Tasks.
+
+Include difficulty levels: Easy, Medium, and Hard.
+
+Allow users to mark challenges as completed, skip challenges, and add notes or answers.
+
+Track and store daily streak count, total challenges completed, weekly and monthly completion rates, points or badge rewards, and challenge history.
+
+Daily Challenge UI
+
+Display today’s challenge in a highlighted card.
+
+Show category, difficulty, estimated time, and completion status.
+
+Include Complete, Skip, and Add Notes actions.
+
+Display streak count and past challenge history.
+
+Overall Progress Dashboard module
+Goal
+
+Create a dashboard where users can manually update their daily work and automatically track progress from other modules.
+
+Daily update form
+
+Allow users to log the following:
+
+Coding problems solved.
+
+Interview questions practiced.
+
+Quizzes completed.
+
+Public speaking sessions practiced.
+
+System design topics studied.
+
+Study hours.
+
+Job applications submitted.
+
+Resume or portfolio updates.
+
+Notes about what they accomplished.
+
+Dashboard features
+
+Display the following:
+
+Today’s progress summary.
+
+Weekly progress summary.
+
+Monthly progress summary.
+
+Total study hours.
+
+Total coding problems solved.
+
+Total quizzes completed.
+
+Total interview practice sessions.
+
+Total public speaking sessions.
+
+Current streak count.
+
+Completion percentage of planned tasks.
+
+Recent activity feed.
+
+Visualizations
+
+Include the following charts and visual elements:
+
+Line chart for daily activity.
+
+Bar chart for weekly completion.
+
+Pie chart for activity distribution.
+
+Progress rings for Career Roadmap completion, Target Company readiness, and Daily Challenge completion.
+
+Target company integration
+Career Roadmap connection
+
+The dashboard must automatically display:
+
+Selected target company or companies.
+
+Current roadmap stage.
+
+Required skills for the target company.
+
+Readiness percentage based on completed roadmap items and daily progress.
+
+Recommendations
+
+Show the following:
+
+Recommended daily tasks.
+
+Skills that need improvement.
+
+Upcoming preparation milestones.
+
+Estimated readiness timeline.
+
+Automation requirements
+
+Generate new daily challenges automatically every day.
+
+Create a new daily progress entry automatically if one does not exist.
+
+Save all progress data permanently in the database.
+
+Update dashboard statistics automatically whenever the user completes a challenge or submits a daily update.
+
+Preserve historical data for weekly, monthly, and yearly trend analysis.
+
+Support reminder notifications for daily challenges and progress updates.
+
+Sidebar integration
+
+Add these modules under the Practice section:
+
+Daily Challenge
+
+Progress Dashboard
+
+Use icons and styling consistent with the existing dark-themed sidebar.
+
+Database requirements
+
+Create database tables or collections for:
+
+Users
+
+Daily challenges
+
+Challenge completions
+
+Daily progress logs
+
+Progress statistics
+
+Target company data
+
+Career roadmap progress
+
+User notes and activity logs
+
+Backend requirements
+
+Create API endpoints for:
+
+Fetching today’s daily challenge.
+
+Generating new daily challenges.
+
+Marking a challenge as completed.
+
+Saving daily progress updates.
+
+Fetching dashboard statistics.
+
+Fetching target company readiness.
+
+Fetching historical progress data.
+
+Frontend requirements
+
+Build reusable components for:
+
+Challenge cards.
+
+Progress summary cards.
+
+Daily update form.
+
+Charts and graphs.
+
+Target company readiness section.
+
+Activity timeline.
+
+Ensure the UI is polished, modern, responsive, and consistent with the existing platform design.
+
+Success criteria
+
+Daily challenges update automatically every day.
+
+The progress dashboard updates automatically when data changes.
+
+Users can manually add daily updates at any time.
+
+The dashboard shows target company readiness based on Career Roadmap progress and daily activity.
+
+All progress history is stored and reviewable later.
