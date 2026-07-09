@@ -1,0 +1,238 @@
+// Category metadata — single source of truth for labels, order, and category-level gradient family.
+export const categories = [
+    {
+        id: "webdev",
+        label: "Web Dev",
+        shortLabel: "Web",
+        colorFrom: "#22d3ee",
+        colorTo: "#3b82f6",
+    },
+    {
+        id: "ml-fundamentals",
+        label: "ML Fundamentals",
+        shortLabel: "ML",
+        colorFrom: "#34d399",
+        colorTo: "#22d3ee",
+    },
+    {
+        id: "genai-llms",
+        label: "GenAI / LLMs",
+        shortLabel: "GenAI",
+        colorFrom: "#8b5cf6",
+        colorTo: "#3b82f6",
+    },
+    {
+        id: "ai-infra",
+        label: "AI Infra & Tooling",
+        shortLabel: "Infra",
+        colorFrom: "#f472b6",
+        colorTo: "#8b5cf6",
+    },
+];
+
+// 21 topics. `icon` is a lucide-react icon component name.
+// colorFrom/colorTo are drawn from the topic's category family (see above) with slight
+// per-topic variation so cards in the same category feel related but distinguishable.
+export const topics = [
+    // ---------- Web Dev (6) ----------
+    {
+        id: "javascript-es6",
+        name: "JavaScript ES6+",
+        category: "webdev",
+        icon: "Braces",
+        colorFrom: "#facc15",
+        colorTo: "#f59e0b",
+        questionCount: 15,
+    },
+    {
+        id: "typescript-basics",
+        name: "TypeScript Basics",
+        category: "webdev",
+        icon: "FileCode2",
+        colorFrom: "#38bdf8",
+        colorTo: "#3b82f6",
+        questionCount: 15,
+    },
+    {
+        id: "react-fundamentals",
+        name: "React Fundamentals",
+        category: "webdev",
+        icon: "Atom",
+        colorFrom: "#22d3ee",
+        colorTo: "#0ea5e9",
+        questionCount: 15,
+    },
+    {
+        id: "nodejs-express",
+        name: "Node.js & Express",
+        category: "webdev",
+        icon: "Server",
+        colorFrom: "#4ade80",
+        colorTo: "#16a34a",
+        questionCount: 15,
+    },
+    {
+        id: "git-github",
+        name: "Git & GitHub",
+        category: "webdev",
+        icon: "GitBranch",
+        colorFrom: "#fb923c",
+        colorTo: "#ef4444",
+        questionCount: 15,
+    },
+    {
+        id: "rest-apis-http",
+        name: "REST APIs & HTTP",
+        category: "webdev",
+        icon: "Globe",
+        colorFrom: "#60a5fa",
+        colorTo: "#6366f1",
+        questionCount: 15,
+    },
+
+    // ---------- ML Fundamentals (5) ----------
+    {
+        id: "supervised-unsupervised",
+        name: "Supervised vs Unsupervised Learning",
+        category: "ml-fundamentals",
+        icon: "SplitSquareVertical",
+        colorFrom: "#34d399",
+        colorTo: "#059669",
+        questionCount: 15,
+    },
+    {
+        id: "neural-networks-basics",
+        name: "Neural Networks Basics",
+        category: "ml-fundamentals",
+        icon: "CircuitBoard",
+        colorFrom: "#2dd4bf",
+        colorTo: "#0d9488",
+        questionCount: 15,
+    },
+    {
+        id: "model-evaluation-metrics",
+        name: "Model Evaluation Metrics",
+        category: "ml-fundamentals",
+        icon: "Gauge",
+        colorFrom: "#a3e635",
+        colorTo: "#65a30d",
+        questionCount: 15,
+    },
+    {
+        id: "overfitting-regularization",
+        name: "Overfitting & Regularization",
+        category: "ml-fundamentals",
+        icon: "Waves",
+        colorFrom: "#4ade80",
+        colorTo: "#0891b2",
+        questionCount: 15,
+    },
+    {
+        id: "feature-engineering",
+        name: "Feature Engineering",
+        category: "ml-fundamentals",
+        icon: "Wrench",
+        colorFrom: "#22d3ee",
+        colorTo: "#10b981",
+        questionCount: 15,
+    },
+
+    // ---------- GenAI / LLMs (6) ----------
+    {
+        id: "transformer-architecture",
+        name: "Transformer Architecture",
+        category: "genai-llms",
+        icon: "Brain",
+        colorFrom: "#8b5cf6",
+        colorTo: "#3b82f6",
+        questionCount: 15,
+    },
+    {
+        id: "attention-mechanism",
+        name: "Attention Mechanism",
+        category: "genai-llms",
+        icon: "Focus",
+        colorFrom: "#a78bfa",
+        colorTo: "#6366f1",
+        questionCount: 15,
+    },
+    {
+        id: "tokenization",
+        name: "Tokenization",
+        category: "genai-llms",
+        icon: "SplitSquareHorizontal",
+        colorFrom: "#c084fc",
+        colorTo: "#7c3aed",
+        questionCount: 15,
+    },
+    {
+        id: "prompt-engineering",
+        name: "Prompt Engineering",
+        category: "genai-llms",
+        icon: "Wand2",
+        colorFrom: "#818cf8",
+        colorTo: "#8b5cf6",
+        questionCount: 15,
+    },
+    {
+        id: "rag",
+        name: "RAG (Retrieval-Augmented Generation)",
+        category: "genai-llms",
+        icon: "Database",
+        colorFrom: "#7c9cf8",
+        colorTo: "#a855f7",
+        questionCount: 15,
+    },
+    {
+        id: "embeddings-vector-search",
+        name: "Embeddings & Vector Search",
+        category: "genai-llms",
+        icon: "Orbit",
+        colorFrom: "#93c5fd",
+        colorTo: "#8b5cf6",
+        questionCount: 15,
+    },
+
+    // ---------- AI Infra & Tooling (4) ----------
+    {
+        id: "langchain-agents",
+        name: "LangChain / Agent Frameworks",
+        category: "ai-infra",
+        icon: "Bot",
+        colorFrom: "#f472b6",
+        colorTo: "#c026d3",
+        questionCount: 15,
+    },
+    {
+        id: "vector-databases",
+        name: "Vector Databases",
+        category: "ai-infra",
+        icon: "Layers",
+        colorFrom: "#e879f9",
+        colorTo: "#8b5cf6",
+        questionCount: 15,
+    },
+    {
+        id: "model-deployment-apis",
+        name: "Model Deployment & APIs",
+        category: "ai-infra",
+        icon: "Rocket",
+        colorFrom: "#fb7185",
+        colorTo: "#9333ea",
+        questionCount: 15,
+    },
+    {
+        id: "finetuning-vs-fewshot",
+        name: "Fine-tuning vs Few-shot Prompting",
+        category: "ai-infra",
+        icon: "SlidersHorizontal",
+        colorFrom: "#f0abfc",
+        colorTo: "#d946ef",
+        questionCount: 15,
+    },
+];
+
+export const getTopicById = (id) => topics.find((t) => t.id === id);
+export const getTopicsByCategory = (categoryId) =>
+    categoryId === "all" ? topics : topics.filter((t) => t.category === categoryId);
+export const getCategoryById = (id) => categories.find((c) => c.id === id);

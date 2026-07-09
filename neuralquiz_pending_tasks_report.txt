@@ -1,0 +1,79 @@
+# NeuralQuiz Implementation Report & Pending Tasks
+
+## Overview
+This report outlines the current state of the NeuralQuiz project within the Friday_AI workspace and details the exact pending tasks. Provide this report to the model to efficiently complete the remaining implementation without redundant exploration.
+
+## Current State & Completed Files
+The foundational data and utility layers are fully implemented:
+1. **Dependencies:** `tailwindcss`, `framer-motion`, and `lucide-react` are installed.
+2. **Topic Metadata:** `src/data/topics.js` (Fully populated with 21 topics, icons, and gradients)
+3. **Question Banks (15 questions per topic):**
+   - `src/data/questions/webdev.js` (Completed)
+   - `src/data/questions/mlFundamentals.js` (Completed)
+   - `src/data/questions/genaiLlms.js` (Completed)
+   - `src/data/questions/aiInfra.js` (Completed)
+4. **Utilities:**
+   - `src/utils/shuffle.js` (Completed: Fisher-Yates shuffle)
+   - `src/utils/scoring.js` (Completed: Scoring, grades, topic breakdowns)
+5. **Main Structure:** The directories and empty stub files are correctly placed in the project.
+
+## Exact Pending Files to Implement (Currently Empty Stubs)
+The following files are currently empty and need to be implemented according to the UI/UX specifications (Dark-first, Glassmorphism, Framer Motion animations):
+
+### 1. State Management & Hooks
+- `src/context/QuizContext.jsx` (Global state for selected topic, current question, answers, quiz phase)
+- `src/hooks/useQuizEngine.js` (Logic for advance/back, answer recording, result computation)
+- `src/hooks/useLocalHistory.js` (Read/write past attempts to localStorage)
+- `src/hooks/useCountUp.js` (Animated number for score reveal)
+
+### 2. UI Primitives
+- `src/components/ui/GlassCard.jsx` (Base glassmorphic container: backdrop-blur, translucent bg)
+- `src/components/ui/Button.jsx` (Primary, secondary, ghost variants)
+- `src/components/ui/Badge.jsx` (Small pill labels)
+
+### 3. Layout Components
+- `src/components/layout/AppShell.jsx` (Page wrapper with background gradient/mesh)
+- `src/components/layout/Navbar.jsx` (Navigation and logo)
+
+### 4. Home / Topic Selection
+- `src/components/home/CategoryFilter.jsx` (Pill buttons for filtering: All/Web Dev/ML/etc.)
+- `src/components/home/TopicBentoGrid.jsx` (Asymmetric bento grid layout)
+- `src/components/home/TopicCard.jsx` (Glassmorphic topic card with hover gradient glow)
+
+### 5. Quiz Execution
+- `src/components/quiz/QuizRunner.jsx` (Orchestrates the active quiz session)
+- `src/components/quiz/QuestionCard.jsx` (Displays question, code blocks, and options)
+- `src/components/quiz/OptionButton.jsx` (Selectable option with hover/selected states)
+- `src/components/quiz/ProgressBar.jsx` (Animated progress bar)
+- `src/components/quiz/QuestionNav.jsx` (Dot indicators for navigation)
+
+### 6. Results & History
+- `src/components/results/ResultsSummary.jsx` (Score reveal using useCountUp, letter grade)
+- `src/components/results/ScoreRing.jsx` (SVG circular progress)
+- `src/components/results/ExplanationList.jsx` (Color-coded review of questions vs. correct answers)
+- `src/components/results/TopicBreakdown.jsx` (Accuracy bar chart per topic)
+- `src/components/results/RetryMistakes.jsx` (Button to re-take wrong questions)
+- `src/components/history/HistoryPanel.jsx` (Displays past attempts from localStorage)
+
+### 7. Pages
+- `src/pages/HomePage.jsx` (Renders CategoryFilter + TopicBentoGrid)
+- `src/pages/QuizPage.jsx` (Renders QuizRunner)
+- `src/pages/ResultsPage.jsx` (Renders ResultsSummary + Explanations)
+- `src/pages/HistoryPage.jsx` (Renders HistoryPanel)
+
+## Sidebar Integration Requirements
+The user specifically requested: *"when i click sidebar it should appear on this now complete it and make sure everything is working"*.
+
+To achieve this in the Friday_AI application:
+1. Update `src/sidebar/Sidebar.jsx`: Add a "Quiz" (NeuralQuiz) button in the Practice section alongside "Interview" and "Public Speaking".
+2. You have two options for rendering:
+   - **Option A (Panel):** Implement NeuralQuiz as a slide-in panel in `src/sidebar/SidebarPanels.jsx` (similar to `InterviewPanel`).
+   - **Option B (Full Page Router):** Add React Router paths in `src/App.jsx` (e.g., `<Route path="/practice-quiz/*" element={<AppShell>...<Routes/></AppShell>} />`) and navigate to it when the sidebar button is clicked. Option B is recommended given the extensive multi-page nature of the NeuralQuiz design (HomePage, QuizPage, ResultsPage).
+
+## Model Instructions
+When continuing this task, instruct the model to:
+1. Sequentially implement the Context & Hooks.
+2. Implement the UI Primitives and Layout.
+3. Build the specific component modules (Home, Quiz, Results, History).
+4. Assemble the Pages.
+5. Wire the Pages into `App.jsx` and add the trigger button to `Sidebar.jsx`.
